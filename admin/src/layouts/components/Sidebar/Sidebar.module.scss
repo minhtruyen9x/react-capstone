@@ -1,0 +1,22 @@
+.wrapper {
+    width: 260px;
+    height: 100vh;
+    overflow-y: overlay;
+    background-color: var(--bg-light-color);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 30px;
+
+    h1 {
+        font-size: 1.8rem;
+        color: var(--heading-color);
+    }
+}
+
+.menu {
+    padding: 20px;
+}
