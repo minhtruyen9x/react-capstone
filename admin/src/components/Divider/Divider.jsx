@@ -1,5 +1,7 @@
-import styles from './Divider.module.scss'
+import PropTypes from 'prop-types';
 import classnames from 'classnames/bind'
+
+import styles from './Divider.module.scss'
 const cx = classnames.bind(styles)
 
 const Divider = ({
@@ -26,5 +28,13 @@ const Divider = ({
         <hr className={customClass} />
     )
 }
+
+Divider.propTypes = {
+    children: PropTypes.node,
+    orientation: PropTypes.string,
+    textAlign: PropTypes.string,
+    variant: PropTypes.string,
+}
+
 
 export default Divider

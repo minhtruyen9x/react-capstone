@@ -37,8 +37,8 @@
     --indicator-size: 8px;
     --stroke-width: 1px;
     --stroke-height: 8px;
-    --indicator-color: #414449;
-    --indicator-active-color: #00BAC7;
+    --indicator-color: rgb(65, 68, 73); //#414449
+    --indicator-active-color: var(--primary-color); //#00BAC7
     --spacer: 4px;
 
 
@@ -56,12 +56,7 @@
 
     }
 
-    &.active {
-        &>.title::before {
-            background-color: var(--indicator-active-color);
-            border: none;
-        }
-    }
+
 
     .title {
         position: relative;
@@ -123,6 +118,21 @@
             transform: translateX(calc(var(--stroke-width)/2 * -1));
         }
 
+    }
+
+    &.active {
+        &>.title::before {
+            background-color: var(--indicator-active-color);
+            opacity: 0.8;
+            border: none;
+        }
+
+    }
+
+    &.expanded>.title {
+        .iconToggle {
+            transform: rotate(180deg);
+        }
     }
 
     &:first-child>.title::after {

@@ -1,6 +1,9 @@
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
+
 import styles from './Button.module.scss'
 import classnames from 'classnames/bind'
+import React from 'react'
 const cx = classnames.bind(styles)
 
 const Button = ({
@@ -16,8 +19,8 @@ const Button = ({
     solid,
     outline,
     round,
-    endIcon,
-    startIcon,
+    rightIcon,
+    leftIcon,
     ...passProps }) => {
 
     let RootType = 'button'
@@ -56,11 +59,28 @@ const Button = ({
 
     return (
         <RootType {...passProps} className={customClass}>
-            {startIcon && <span className={styles.icon}>{startIcon}</span>}
+            {leftIcon && <span className={styles.icon}>{leftIcon}</span>}
             {children}
-            {endIcon && <span className={styles.icon}>{endIcon}</span>}
+            {rightIcon && <span className={styles.icon}>{rightIcon}</span>}
         </RootType>
     )
 }
+
+Button.propTypes = {
+    href: PropTypes.string,
+    to: PropTypes.string,
+    disable: PropTypes.bool,
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string,
+    primary: PropTypes.bool,
+    fullWidth: PropTypes.bool,
+    large: PropTypes.bool,
+    small: PropTypes.bool,
+    solid: PropTypes.bool,
+    outline: PropTypes.bool,
+    round: PropTypes.bool,
+    rightIcon: PropTypes.node,
+    leftIcon: PropTypes.node
+};
 
 export default Button

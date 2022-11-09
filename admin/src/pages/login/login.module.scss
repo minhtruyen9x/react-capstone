@@ -90,13 +90,15 @@
 
     .remember {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         color: var(--text-light-color);
+        line-height: 2rem;
 
         input {
             background-color: transparent;
             border: 1px solid var(--border-color);
             margin-right: 12px;
+            height: 2rem;
         }
 
     }

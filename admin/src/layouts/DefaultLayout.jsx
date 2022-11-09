@@ -4,7 +4,9 @@ import styles from './defaultLayout.module.scss'
 
 
 
-import { Header, Sidebar } from './components'
+import Header from './components/Header'
+import Sidebar from './components/Sidebar'
+import Footer from './components/Footer'
 // import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs'
 
 const DefaultLayout = () => {
@@ -17,6 +19,7 @@ const DefaultLayout = () => {
                 <div className={styles.content}>
                     <Outlet />
                 </div>
+                <Footer />
             </div>
         </div>
     )

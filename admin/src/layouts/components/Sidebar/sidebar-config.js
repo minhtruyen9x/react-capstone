@@ -11,7 +11,8 @@ import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import SlideshowIcon from '@mui/icons-material/Slideshow';
 import QueuePlayNextIcon from '@mui/icons-material/QueuePlayNext';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-const menu = [
+
+const config = [
     {
         root: true,
         title: "Dashboard",
@@ -19,17 +20,17 @@ const menu = [
             {
                 title: "Home",
                 icon: <HomeIcon fontSize='inherit' color='inherit' />,
-                to: "/",
+                to: "/admin/v1",
             },
             {
                 title: "Analytics",
                 icon: <QueryStatsIcon fontSize='inherit' color='inherit' />,
-                to: "/Analytics",
+                to: "/admin/v1/Analytics",
             },
             {
                 title: "Sales",
                 icon: <TrendingUpIcon fontSize='inherit' color='inherit' />,
-                to: "/Sales"
+                to: "/admin/v1/Sales"
             },
         ]
     },
@@ -41,19 +42,23 @@ const menu = [
             {
                 title: "Users",
                 icon: <PermIdentityOutlinedIcon fontSize='inherit' color='inherit' />,
+                to: '/admin/v1/users'
             },
             {
                 title: "Movies",
                 icon: <SlideshowIcon fontSize='inherit' color='inherit' />,
-
+                to: '/admin/v1/movies'
             },
             {
                 title: "Add User",
                 icon: <PersonAddIcon fontSize='inherit' color='inherit' />,
+                to: '/admin/v1/users/new'
+
             },
             {
                 title: "Add Movie",
                 icon: <QueuePlayNextIcon fontSize='inherit' color='inherit' />,
+                to: '/admin/v1/movies/new'
             },
         ]
     },
@@ -65,15 +70,17 @@ const menu = [
             {
                 title: "Email",
                 icon: <EmailOutlinedIcon fontSize='inherit' color='inherit' />,
+                to: '/admin/v1/email'
             },
             {
                 title: "Feedback",
                 icon: <DynamicFeedOutlinedIcon fontSize='inherit' color='inherit' />,
-
+                to: '/admin/v1/feedback'
             },
             {
                 title: "Message",
                 icon: <SmsOutlinedIcon fontSize='inherit' color='inherit' />,
+                to: '/admin/v1/message'
             }
         ]
     },
@@ -85,11 +92,12 @@ const menu = [
             {
                 title: "Mangage",
                 icon: <ManageHistoryOutlinedIcon fontSize='inherit' color='inherit' />,
+                to: '/admin/v1/manage'
             },
             {
                 title: "Report",
                 icon: <BugReportOutlinedIcon fontSize='inherit' color='inherit' />,
-
+                to: '/admin/v1/report'
             }
         ]
     },
@@ -97,8 +105,9 @@ const menu = [
         root: true,
         separate: true,
         title: "Documentation",
-        icon: <TextSnippetOutlinedIcon fontSize='inherit' color='inherit' />
+        icon: <TextSnippetOutlinedIcon fontSize='inherit' color='inherit' />,
+        to: '/admin/v1/documentation'
     },
 ]
 
-export default menu
+export default config

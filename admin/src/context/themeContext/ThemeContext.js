@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import styles from './Theme.module.scss'
-console.log(styles)
+
 const ThemeContext = createContext()
 
 export const ThemeProvider = ({ children }) => {

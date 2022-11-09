@@ -1,4 +1,5 @@
-import React from 'react'
+import PropTypes from 'prop-types';
+
 import styles from './TextField.module.scss'
 
 const TextField = ({ type = "text", label, onChange, ...passProp }) => {
@@ -8,6 +9,12 @@ const TextField = ({ type = "text", label, onChange, ...passProp }) => {
             {label && <label>{label}</label>}
         </div>
     )
+}
+
+TextField.propTypes = {
+    type: PropTypes.string,
+    label: PropTypes.string,
+    onChange: PropTypes.func
 }
 
 export default TextField
