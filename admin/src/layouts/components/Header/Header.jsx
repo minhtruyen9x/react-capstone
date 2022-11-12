@@ -1,20 +1,17 @@
-import { useContext } from 'react'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SyncIcon from '@mui/icons-material/Sync';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 
 
-import { Button, Divider } from '../../../components'
-import ThemeContext from '../../../context/themeContext/ThemeContext'
-
+import Button from '../../../components/Button'
+import Divider from '../../../components/Divider'
+import ThemeToggle from './ThemeToggle';
 
 import styles from './Header.module.scss'
+import AccountMenu from './AccountMenu';
+
 const Header = () => {
-    const [theme, setTheme] = useContext(ThemeContext)
-    // console.log(thememode)
     const loading = false
 
     return (
@@ -31,28 +28,12 @@ const Header = () => {
                 </button>
             </div>
             <div className={styles.control}>
-                <Button
-                    round
-                    className={styles.toggleTheme}
-                    onClick={() => {
-                        setTheme(theme => {
-                            if (theme === 'light-theme') return 'dark-theme'
-                            if (theme === 'dark-theme') return 'light-theme'
-                        })
-                    }}
-                >
-                    {theme === 'light-theme' ?
-                        <DarkModeIcon fontSize='inherit' /> :
-                        <LightModeOutlinedIcon fontSize='inherit' />
-                    }
-                </Button>
+                <ThemeToggle />
                 <Divider orientation='vertical'></Divider>
                 <Button className={styles.notificates}>
                     <NotificationsNoneOutlinedIcon fontSize='inherit' />
                 </Button>
-                <Button className={styles.avatar}>
-                    <img src="https://phunugioi.com/wp-content/uploads/2022/03/Avatar-Gau.jpg" alt="" />
-                </Button>
+                <AccountMenu />
             </div>
         </div>
     )

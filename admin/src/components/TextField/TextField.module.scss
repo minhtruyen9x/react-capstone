@@ -2,8 +2,9 @@
     --input-height: 40px;
     position: relative;
 
-    input {
+    .input {
         width: 100%;
+        max-width: 100%;
         height: var(--input-height);
         background-color: transparent;
         color: var(--heading-color);
@@ -17,13 +18,21 @@
             outline: 2px solid var(--border-color);
         }
 
+        &::placeholder {
+            visibility: hidden;
+        }
+
+    }
+
+    textarea.input {
+        height: auto;
     }
 
     label {
         position: absolute;
         left: 20px;
-        top: calc(var(--input-height) / 2);
-        transform: translateY(-50%);
+        top: 0;
+        transform: translateY(calc(-50% + var(--input-height) / 2));
         padding: 0 8px;
         background-color: var(--bg-light-color);
         color: var(--text-light-color);
@@ -32,16 +41,23 @@
         line-height: 1;
         pointer-events: none;
         transition: 0.2s;
+        transition-property: transform, color;
+
     }
 
-    input:focus~label {
+    .input:focus~label {
         color: var(--primary-color);
     }
 
-    input:focus~label,
-    input:valid~label {
-        top: 0;
+    .input:focus~label,
+    .input:not(:placeholder-shown)~label {
         font-size: 1.4rem;
         transform: translateY(-50%);
+    }
+
+    .errorMess {
+        color: rgb(252, 46, 46);
+        font-size: 1.2rem;
+        margin: 4px 0 0 16px;
     }
 }

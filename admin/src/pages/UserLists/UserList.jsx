@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { DataGrid } from '@mui/x-data-grid';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
@@ -10,11 +9,22 @@ import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 
-import { userRows } from "../../dummyData";
 import styles from './UserList.module.scss'
-import { Button, MoreMenu } from '../../components'
+import Button from '../../components/Button'
+import MoreMenu from '../../components/MoreMenu'
+import TableData from '../../components/TableData'
 
-const dataMap = [
+import { useDispatch, useSelector } from 'react-redux'
+import { getUsers, deleteUser } from '../../slices/userSlice'
+// {
+//     "taiKhoan": "21e12e22121212122",
+//     "hoTen": "phong123",
+//     "email": "7777123@gmail.com",
+//     "soDT": "0977737383888",
+//     "matKhau": "3235555",
+//     "maLoaiNguoiDung": "QuanTri"
+//   }
+const menu = [
     {
         title: "Export report",
         icon: <LocalPrintshopOutlinedIcon />
@@ -28,7 +38,8 @@ const dataMap = [
         icon: <UnfoldMoreOutlinedIcon />
     },
 ]
-const dataMap2 = [
+
+const actions = [
     {
         title: "Edit",
         icon: <EditOutlinedIcon />,
@@ -42,17 +53,22 @@ const dataMap2 = [
 ]
 
 const UserList = () => {
-    const [data, setData] = useState(userRows);
+    const dispatch = useDispatch()
+    const { users, loading, error } = useSelector(state => state.user)
     const naigate = useNavigate()
+    console.log("list render")
 
     const handleSelect = (action, id) => {
         switch (action) {
             case "delete": {
-                setData(data.filter((item) => item.id !== id));
+                (async () => {
+                    await dispatch(deleteUser(id))
+                    dispatch(getUsers())
+                })()
                 break
             }
             case "edit": {
-                naigate("/admin/v1/users/" + id)
+                naigate("/admin/users/" + id)
                 break
             }
             default:
@@ -61,25 +77,30 @@ const UserList = () => {
 
     }
 
+    useEffect(() => {
+        dispatch(getUsers())
+    }, [])
+
     const columns = [
-        { field: "id", headerName: "ID", width: 60 },
         {
-            field: "user",
-            headerName: "User",
+            field: "hoTen",
+            headerName: "Fullname",
             width: 200,
-            renderCell: (params) => {
-                return (
-                    <div className={styles.user}>
-                        <img className={styles.userImg} src={params.row.avatar} alt="" />
-                        {params.row.username}
-                    </div>
-                );
-            },
         },
-        { field: "email", headerName: "Email", width: 200 },
         {
-            field: "status",
-            headerName: "Status",
+            field: "taiKhoan",
+            headerName: "User",
+            width: 160
+        },
+        { field: "email", headerName: "Email", width: 220 },
+        {
+            field: "soDT",
+            headerName: "Phone",
+            width: 120,
+        },
+        {
+            field: "maLoaiNguoiDung",
+            headerName: "Role",
             width: 120,
         },
         {
@@ -90,7 +111,11 @@ const UserList = () => {
             width: 60,
             renderCell: (params) => {
                 return (
-                    <MoreMenu items={dataMap2} placement='bottom-end' onChange={({ action }) => { handleSelect(action, params.row.id) }}>
+                    <MoreMenu
+                        items={actions}
+                        placement='bottom-end'
+                        onChange={(item) => handleSelect(item.action, params.row.taiKhoan)}
+                    >
                         <MoreHorizOutlinedIcon />
                     </MoreMenu>
                 );
@@ -104,24 +129,20 @@ const UserList = () => {
                 <h2>Users</h2>
                 <div className={styles.control}>
                     <Button solid leftIcon={<AddOutlinedIcon />}>
-                        <Link to='/admin/v1/users/new'>Add User</Link>
+                        <Link to='/admin/users/new'>Add User</Link>
                     </Button>
-                    <MoreMenu items={dataMap} placement='bottom-end'>
+                    <MoreMenu items={menu} placement='bottom-end'>
                         <MoreVertOutlinedIcon fontSize='inherit' />
                     </MoreMenu>
                 </div>
             </header>
-            <DataGrid
-                className={styles.table}
-                rows={data}
-                disableSelectionOnClick
+            <TableData
+                rows={users}
                 columns={columns}
+                getRowId={(row) => row.taiKhoan}
                 rowsPerPageOptions={[10]}
                 pageSize={10}
-                pagination
-                checkboxSelection
-                getRowClassName={() => styles.row}
-                disableColumnMenu={true}
+                loading={loading}
             />
         </div>
     )

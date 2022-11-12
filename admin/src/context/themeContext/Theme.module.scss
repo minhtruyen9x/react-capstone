@@ -1,4 +1,4 @@
-.theme {
+:root:has(.theme) {
     --white-color: white;
     --black-color: black;
     --primary-color: rgb(44, 123, 229); //#2c7be5
@@ -9,7 +9,7 @@
     --link-hover-color: rgb(35, 98, 183);
 }
 
-.light-theme {
+:root:has(.light-theme) {
 
     // background color
     --bg-color: rgb(237, 242, 249);
@@ -48,7 +48,7 @@
 
 }
 
-.dark-theme {
+:root:has(.dark-theme) {
     --primary-color: rgb(35, 98, 183);
 
     // background color
