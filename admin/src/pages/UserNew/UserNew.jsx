@@ -1,27 +1,31 @@
 import { useForm } from 'react-hook-form'
-// import { useDispatch } from 'react-redux';
-import useRequest from '../../hooks/useRequest'
-import userAPI from '../../services/userAPI'
-import Grid from '@mui/material/Unstable_Grid2';
-import { } from '../../slices/userSlice'
+import { toast } from 'react-toastify'
 
+import Grid from '@mui/material/Unstable_Grid2';
 
 import styles from './UserNew.module.scss'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
 import cameraImg from '../../assets/images/camera.png'
 
+import userAPI from '../../services/userAPI'
+import useRequest from '../../hooks/useRequest'
+
 const UserNew = () => {
-    const [{ loading, error, data }, sendRequest] = useRequest({ apiCall: userAPI.createUser })
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const createUser = useRequest(userAPI.createUser, { manual: true })
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
         defaultValues: { taiKhoan: "", hoTen: "", matKhau: "", email: "", soDT: "", maLoaiNguoiDung: "" }
     })
 
     const onSubmit = (values) => {
-        (async () => {
-            const data = await sendRequest(values)
-            console.log(data)
-        })()
+        createUser.runAsync(values)
+            .then(() => {
+                toast.success("create user success")
+                reset()
+            })
+            .catch(() => {
+                toast.error("something went wrong, please try again")
+            })
     }
 
     return (
@@ -114,9 +118,10 @@ const UserNew = () => {
                             {errors.maLoaiNguoiDung && errors.maLoaiNguoiDung.message}
                         </Grid>
                         <div className={styles.control}>
-                            <Button solid primary>Upload</Button>
-                            <Button solid primary>Create</Button>
+                            <Button solid primary disable>Upload</Button>
+                            <Button solid primary disable={createUser.loading}>Create</Button>
                         </div>
+                        {createUser.error && <p className={styles.errorMess}>{createUser.error}</p>}
                     </Grid>
                 </Grid>
             </form>

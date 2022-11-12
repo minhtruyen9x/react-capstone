@@ -32,7 +32,6 @@ export const getUserInfo = createAsyncThunk(
         }
     }
 )
-console.log("asdasdas")
 
 export const deleteUser = createAsyncThunk(
     "user/delete",
@@ -50,6 +49,7 @@ const userSlice = createSlice({
     name: "user",
     initialState,
     extraReducers: (builder) => {
+        // get all user action
         builder.addCase(getUsers.pending, (state, action) => {
             return { ...state, loading: true, error: false }
         })
@@ -62,6 +62,7 @@ const userSlice = createSlice({
             return { ...state, loading: false, error: action.error.message, users: [] }
         })
 
+        // get user information action
         builder.addCase(getUserInfo.pending, (state, action) => {
             return { ...state, loading: true, error: false }
         })

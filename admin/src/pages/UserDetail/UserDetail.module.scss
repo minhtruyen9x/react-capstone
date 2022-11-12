@@ -5,8 +5,18 @@
     min-height: 100%;
 }
 
+.header {
+    margin-bottom: 20px;
+}
+
 .container {
     position: relative;
+    padding: 20px;
+    color: var(--text-color);
+
+    h3 {
+        margin-bottom: 30px;
+    }
 }
 
 .editBtn {
@@ -15,10 +25,51 @@
     right: 30px;
 }
 
+.deleteBtn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--error-color);
+    color: rgb(255, 255, 255);
+}
+
+.infoWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .info {
+        display: flex;
+
+        p {
+            width: 40%;
+            font-weight: 600;
+        }
+    }
+}
+
+.control {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.errorMess {
+    color: var(--error-color);
+    font-size: 1.2rem;
+    text-align: end;
+    margin: 12px 20px 0 auto;
+}
+
 .avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     img {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
         object-fit: cover;
     }
 }

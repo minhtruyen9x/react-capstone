@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 
 import styles from './login.module.scss'
@@ -13,14 +13,21 @@ import { login } from "../../slices/authSlice"
 
 const Login = () => {
     const dispatch = useDispatch()
+    const { state } = useLocation()
     const { error, loading, user } = useSelector(state => state.auth)
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
         defaultValues: { taiKhoan: "", matKhau: "" }
     })
 
     const onSubmit = (values) => {
         dispatch(login(values))
+    }
+
+    if (state) {
+        for (const [key, value] of Object.entries(state)) {
+            setValue(key, value)
+        }
     }
 
     if (user) {

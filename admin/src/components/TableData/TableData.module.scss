@@ -5,6 +5,7 @@
     *[class*='Mui'] {
         font-size: 1.6rem;
         border-color: var(--border-color) !important;
+        color: var(--text-color);
 
         &::-webkit-scrollbar-thumb {
             display: none;

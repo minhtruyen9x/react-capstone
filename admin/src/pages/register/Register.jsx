@@ -1,37 +1,39 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import Grid from '@mui/material/Unstable_Grid2';
+import { toast } from 'react-toastify'
 
+import Grid from '@mui/material/Unstable_Grid2';
 
 import styles from './register.module.scss'
 import { Logo } from '../../components/SVG'
 import Button from '../../components/Button'
 import TextField from '../../components/TextField'
+
 import authAPI from '../../services/authAPI'
-import { useState } from 'react';
-// "taiKhoan": "string",
-//   "matKhau": "string",
-//   "email": "string",
-//   "soDt": "string",
-//   "hoTen": "string"
+import useRequest from '../../hooks/useRequest';
 
 const Register = () => {
     const navigate = useNavigate()
-    const [status, setStatus] = useState({ loading: false, error: false })
+    const registerRequest = useRequest(authAPI.register, { manual: true })
 
     const { register, handleSubmit, formState: { errors }, watch } = useForm({
         defaultValues: { taiKhoan: "", matKhau: "", email: "", soDt: "", fisrtName: "", lastName: "", confirmPass: "" }
     })
 
     const onSubmit = async (values) => {
-        setStatus(prev => ({ ...prev, loading: true, error: false }))
-        try {
-            await authAPI.register({ ...values, hoTen: values.fisrtName + " " + values.lastName })
-            navigate('/login', { state: "Register account successfully" })
-
-        } catch (error) {
-            setStatus(prev => ({ ...prev, loading: false, error: error }))
-        }
+        registerRequest.runAsync({ ...values, hoTen: values.fisrtName + " " + values.lastName })
+            .then(() => {
+                toast.success("Register successfully")
+                navigate("/login", {
+                    state: {
+                        taiKhoan: values.taiKhoan,
+                        matKhau: values.matKhau
+                    }
+                })
+            })
+            .catch((error) => {
+                toast.error("Error: " + error)
+            })
     }
 
     return (
@@ -126,8 +128,15 @@ const Register = () => {
                                 </label>
                             </div>
                         </div>
-                        {status.error && <p className={styles.errorMess}>{status.error}</p>}
-                        <Button solid primary large >Register</Button>
+                        {registerRequest.error && <p className={styles.errorMess}>{registerRequest.error}</p>}
+                        <Button
+                            solid
+                            primary
+                            large
+                            disable={registerRequest.loading}
+                        >
+                            Register
+                        </Button>
                     </form>
                 </div>
             </div>

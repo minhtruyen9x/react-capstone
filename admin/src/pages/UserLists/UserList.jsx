@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from "react-router-dom";
+
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
@@ -14,49 +16,12 @@ import Button from '../../components/Button'
 import MoreMenu from '../../components/MoreMenu'
 import TableData from '../../components/TableData'
 
-import { useDispatch, useSelector } from 'react-redux'
 import { getUsers, deleteUser } from '../../slices/userSlice'
-// {
-//     "taiKhoan": "21e12e22121212122",
-//     "hoTen": "phong123",
-//     "email": "7777123@gmail.com",
-//     "soDT": "0977737383888",
-//     "matKhau": "3235555",
-//     "maLoaiNguoiDung": "QuanTri"
-//   }
-const menu = [
-    {
-        title: "Export report",
-        icon: <LocalPrintshopOutlinedIcon />
-    },
-    {
-        title: "Share",
-        icon: <ShareOutlinedIcon />
-    },
-    {
-        title: "Actions",
-        icon: <UnfoldMoreOutlinedIcon />
-    },
-]
-
-const actions = [
-    {
-        title: "Edit",
-        icon: <EditOutlinedIcon />,
-        action: 'edit'
-    },
-    {
-        title: "Delete",
-        icon: <DeleteOutline />,
-        action: 'delete'
-    },
-]
 
 const UserList = () => {
     const dispatch = useDispatch()
     const { users, loading, error } = useSelector(state => state.user)
     const naigate = useNavigate()
-    console.log("list render")
 
     const handleSelect = (action, id) => {
         switch (action) {
@@ -79,40 +44,73 @@ const UserList = () => {
 
     useEffect(() => {
         dispatch(getUsers())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    const menu = [
+        {
+            title: "Export report",
+            icon: <LocalPrintshopOutlinedIcon />
+        },
+        {
+            title: "Share",
+            icon: <ShareOutlinedIcon />
+        },
+        {
+            title: "Actions",
+            icon: <UnfoldMoreOutlinedIcon />
+        },
+    ]
+
+    const actionsMenu = [
+        {
+            title: "Edit",
+            icon: <EditOutlinedIcon />,
+            action: 'edit'
+        },
+        {
+            title: "Delete",
+            icon: <DeleteOutline />,
+            action: 'delete'
+        },
+    ]
 
     const columns = [
         {
             field: "hoTen",
             headerName: "Fullname",
-            width: 200,
+            flex: 2,
         },
         {
             field: "taiKhoan",
             headerName: "User",
-            width: 160
+            flex: 2,
         },
-        { field: "email", headerName: "Email", width: 220 },
+        {
+            field: "email",
+            headerName: "Email",
+            flex: 2,
+        },
         {
             field: "soDT",
             headerName: "Phone",
-            width: 120,
+            flex: 2,
         },
         {
             field: "maLoaiNguoiDung",
             headerName: "Role",
-            width: 120,
+            flex: 1,
         },
         {
             field: "action",
             headerName: "More",
             description: "Do more action with this",
             sortable: false,
-            width: 60,
+            flex: 1,
             renderCell: (params) => {
                 return (
                     <MoreMenu
-                        items={actions}
+                        items={actionsMenu}
                         placement='bottom-end'
                         onChange={(item) => handleSelect(item.action, params.row.taiKhoan)}
                     >
@@ -143,6 +141,7 @@ const UserList = () => {
                 rowsPerPageOptions={[10]}
                 pageSize={10}
                 loading={loading}
+                error={error ? error : null}
             />
         </div>
     )

@@ -62,7 +62,10 @@ const userAPI = {
     },
 
     createUser: (values) => {
-        return fetcher.post("/QuanLyNguoiDung/ThemNguoiDung", values)
+        return fetcher.post("/QuanLyNguoiDung/ThemNguoiDung", {
+            ...values,
+            maNhom: "GP15"
+        })
     },
 
     updateUser: (values) => {

@@ -7,6 +7,9 @@
     // link color
     --link-color: var(--primary-color);
     --link-hover-color: rgb(35, 98, 183);
+
+    // error color
+    --error-color: rgb(252, 46, 46);
 }
 
 :root:has(.light-theme) {

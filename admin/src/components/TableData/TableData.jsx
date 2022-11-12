@@ -1,4 +1,5 @@
-import React from 'react'
+import PropTypes from 'prop-types';
+
 import { DataGrid } from '@mui/x-data-grid';
 import styles from './TableData.module.scss'
 import CustomNoRowsOverlay from './CustomNoRowsOverlay';
@@ -26,6 +27,11 @@ const TableData = ({ rows, columns, ...passProps }) => {
         // cell
         />
     )
+}
+
+TableData.propTypes = {
+    rows: PropTypes.array.isRequired,
+    columns: PropTypes.array.isRequired
 }
 
 export default TableData

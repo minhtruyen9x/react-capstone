@@ -77,6 +77,12 @@
         gap: 16px;
 
     }
+
+    .errorMess {
+        color: var(--error-color);
+        font-size: 1.2rem;
+        margin: 4px 0 0 16px;
+    }
 }
 
 // config 
