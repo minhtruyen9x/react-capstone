@@ -74,6 +74,19 @@ const userSlice = createSlice({
         builder.addCase(getUserInfo.rejected, (state, action) => {
             return { ...state, loading: false, error: action.error.message, selectedUser: {} }
         })
+
+        // delete user action
+        builder.addCase(deleteUser.pending, (state, action) => {
+            return { ...state, loading: true, error: false }
+        })
+
+        builder.addCase(deleteUser.fulfilled, (state, action) => {
+            return { ...state, loading: false }
+        })
+
+        builder.addCase(deleteUser.rejected, (state, action) => {
+            return { ...state, loading: false }
+        })
     }
 })
 

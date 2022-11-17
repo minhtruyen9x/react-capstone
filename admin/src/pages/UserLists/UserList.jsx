@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify'
 
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
@@ -22,20 +23,28 @@ const UserList = () => {
     const dispatch = useDispatch()
     const { users, loading, error } = useSelector(state => state.user)
     const naigate = useNavigate()
-
+    console.log("das")
     const handleSelect = (action, id) => {
         switch (action) {
             case "delete": {
-                (async () => {
-                    await dispatch(deleteUser(id))
-                    dispatch(getUsers())
-                })()
+                dispatch(deleteUser(id))
+                    .unwrap()
+                    .then((data) => {
+                        toast.success(data)
+                        dispatch(getUsers())
+                    })
+                    .catch((error) => {
+                        toast.error(error.message)
+                    })
+
                 break
             }
+
             case "edit": {
                 naigate("/admin/users/" + id)
                 break
             }
+
             default:
                 break
         }
@@ -126,8 +135,12 @@ const UserList = () => {
             <header className={styles.header}>
                 <h2>Users</h2>
                 <div className={styles.control}>
-                    <Button solid leftIcon={<AddOutlinedIcon />}>
-                        <Link to='/admin/users/new'>Add User</Link>
+                    <Button
+                        to='/admin/users/new'
+                        solid
+                        leftIcon={<AddOutlinedIcon />}
+                    >
+                        Add User
                     </Button>
                     <MoreMenu items={menu} placement='bottom-end'>
                         <MoreVertOutlinedIcon fontSize='inherit' />

@@ -15,13 +15,11 @@ const userAPI = {
         })
     },
 
-    getUsersPagination: ({ tuKhoa, soTrang, soPhanTuTrenTrang }) => {
+    getUsersPagination: (values) => {
         return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDungPhanTrang", {
             params: {
                 maNhom: "GP15",
-                tuKhoa,
-                soTrang,
-                soPhanTuTrenTrang
+                ...values
             }
         })
     },
@@ -35,13 +33,11 @@ const userAPI = {
         })
     },
 
-    getUsersPaginationByKey: ({ tuKhoa, soTrang, soPhanTuTrenTrang }) => {
+    getUsersPaginationByKey: (values) => {
         return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDungPhanTrang", {
             params: {
                 maNhom: "GP15",
-                tuKhoa,
-                soTrang,
-                soPhanTuTrenTrang
+                ...values
             }
         })
     },

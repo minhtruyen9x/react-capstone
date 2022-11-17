@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify';
 
 import Grid from '@mui/material/Unstable_Grid2';
@@ -10,27 +9,17 @@ import styles from './UserDetail.module.scss'
 import Box from '../../components/Box';
 import TableData from '../../components/TableData';
 import Button from '../../components/Button';
-import Modal from '../../components/Modal';
-import TextField from '../../components/TextField';
 import CustomLoadingOverlay from '../../components/TableData/CustomLoadingOverlay';
 import CustomErrorOverLay from '../../components/TableData/CustomErrorOverLay';
 import avatarDefault from '../../assets/images/avatar-default.png'
 
 import { getUserInfo, deleteUser } from '../../slices/userSlice'
-import useRequest from '../../hooks/useRequest'
-import userAPI from '../../services/userAPI'
+import UserEditFormModal from './UserEditFormModal';
 
 const UserDetail = () => {
     const { id } = useParams()
     const dispatch = useDispatch()
     const { selectedUser, loading, error } = useSelector(state => state.user)
-
-    const updateUser = useRequest(userAPI.updateUser, { manual: true })
-    // const deleteUser = useRequest(userAPI.deleteUser, { manual: true })
-
-    const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
-        defaultValues: { taiKhoan: "", hoTen: "", matKhau: "", email: "", soDT: "", maLoaiNguoiDung: "" }
-    })
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -39,41 +28,18 @@ const UserDetail = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
 
-    useEffect(() => {
-        for (const [key, value] of Object.entries(selectedUser)) {
-            setValue(key, value)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpen])
-
-    const handleToggle = (evt) => {
-        evt.preventDefault()
-        reset()
-        setIsOpen(prev => !prev)
-    }
-
-    const onSubmit = async (values) => {
-        updateUser.runAsync(values)
-            .then(() => {
-                setIsOpen(false)
-                dispatch(getUserInfo(id))
-                toast.success("update thanh cong roi!!!!")
-            })
-            .catch(error => {
-                toast.error(error)
-            })
-    }
 
     const handleDelete = async () => {
         dispatch(deleteUser(id))
             .unwrap()
             .then(() => {
-                toast.success("Da delete thanh cong user")
+                toast.success("Delete user successfully")
             })
-            .catch(() => {
-                toast.error("khong delete duoc user")
+            .catch((error) => {
+                toast.error(error.message)
             })
     }
+
     if (loading) {
         return <CustomLoadingOverlay />
     }
@@ -116,12 +82,13 @@ const UserDetail = () => {
             <header className={styles.header}>
                 <h2>User</h2>
             </header>
+            {/******** User information /********/}
             <Grid container spacing={2}>
                 <Grid xs={12}>
                     <Box className={styles.container}>
                         <h3>Basic Infomation</h3>
                         <Grid container spacing={2}>
-                            <Button solid className={styles.editBtn} onClick={handleToggle}>Edit</Button>
+                            <Button solid className={styles.editBtn} onClick={() => setIsOpen(!isOpen)}>Edit</Button>
                             <Button solid className={styles.deleteBtn} onClick={handleDelete}>Delete</Button>
                             <Grid xs={12} md={4} display='flex' alignItems="center" justifyContent="center">
                                 <div className={styles.avatar}>
@@ -171,124 +138,8 @@ const UserDetail = () => {
                     </Box>
                 </Grid>
             </Grid>
-            <Modal
-                open={isOpen}
-                title="Edit User"
-                onClose={handleToggle}
-                footer={(
-                    <>
-                        <div className={styles.control}>
-                            <Button
-                                solid
-                                onClick={handleSubmit(onSubmit)}
-                                disable={updateUser.loading}
-                            >
-                                Update
-                            </Button>
-                            <Button
-                                solid
-                                onClick={handleToggle}
-                            >
-                                Cancel
-                            </Button>
-                        </div>
-                        {updateUser.error &&
-                            <p className={styles.errorMess}>{updateUser.error}</p>}
-                    </>
-                )}
-
-            >
-                <form >
-                    <Grid container spacing={4} disableEqualOverflow>
-                        <Grid xs={12} display="flex" justifyContent="center">
-                            <div className={styles.avatar}>
-                                <img src={selectedUser.hinhAnh || avatarDefault} alt="" />
-                                <span>No Images</span>
-                            </div>
-                        </Grid>
-                        <Grid xs={12} container spacing={4}>
-                            <Grid xs={12}>
-                                <input type="file" />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    label="Username"
-                                    {...register("taiKhoan", {
-                                        required: {
-                                            value: true,
-                                            message: "username is required"
-                                        }
-                                    })}
-                                    error={errors.taiKhoan && errors.taiKhoan.message}
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    label="Full Name"
-                                    {...register("hoTen", {
-                                        required: {
-                                            value: true,
-                                            message: "Full Name is required"
-                                        }
-                                    })}
-                                    error={errors.hoTen && errors.hoTen.message}
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    label="Email"
-                                    {...register("email", {
-                                        required: {
-                                            value: true,
-                                            message: "Email is required"
-                                        }
-                                    })}
-                                    error={errors.email && errors.email.message}
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    label="Phone Number"
-                                    {...register("soDT", {
-                                        required: {
-                                            value: true,
-                                            message: "Phone Number is required"
-                                        }
-                                    })}
-                                    error={errors.soDT && errors.soDT.message}
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <TextField
-                                    label="Password"
-                                    {...register("matKhau", {
-                                        required: {
-                                            value: true,
-                                            message: "Password is required"
-                                        }
-                                    })}
-                                    error={errors.matKhau && errors.matKhau.message}
-                                />
-                            </Grid>
-                            <Grid xs={12} sm={6}>
-                                <select
-                                    {...register("maLoaiNguoiDung", {
-                                        required: {
-                                            value: true,
-                                            message: "Role is required"
-                                        }
-                                    })}
-                                >
-                                    <option value="">Choose role</option>
-                                    <option value="KhachHang">Customer</option>
-                                    <option value="QuanTri">Admin</option>
-                                </select>
-                            </Grid>
-
-                        </Grid>
-                    </Grid>
-                </form>
-            </Modal>
+            {/******** Modal edit user **********/}
+            <UserEditFormModal open={isOpen} onClose={() => setIsOpen(!isOpen)} />
         </div >
     )
 }

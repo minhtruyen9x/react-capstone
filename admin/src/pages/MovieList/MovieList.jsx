@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteMovie, getMovies } from "../../slices/movieSlice";
+import { toast } from 'react-toastify'
+
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import LocalPrintshopOutlinedIcon from '@mui/icons-material/LocalPrintshopOutlined';
@@ -9,119 +13,73 @@ import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 
-import movieAPI from '../../services/movieAPI'
 import styles from './MovieList.module.scss'
 import Button from '../../components/Button'
 import MoreMenu from '../../components/MoreMenu'
 import TableData from '../../components/TableData'
-// "maPhim": 6061,
-//       "tenPhim": "Hành Tinh Mất Trật Tự 88888",
-//       "biDanh": "hanh-tinh-mat-trat-tu-88888",
-//       "trailer": "https://www.youtube.com/embed/CNfNsNkgxjo",
-//       "hinhAnh": "https://movienew.cybersoft.edu.vn/hinhanh/hanh-tinh-hon-loan-2_gp01.jpg",
-//       "moTa": "Todd Hewwitt (Tom Holland) tình cờ phát hiện ra Viola (Daisy Ridley)- một cô gái sống sót sau khi phi thuyền của cô gặp nạn và rơi xuống hành tinh của cậu. Hành tinh này không hề có bóng dáng phụ nữ, còn đàn ông thì bị ảnh hưởng bởi 'Tiếng Ồn' - một thế lực thể hiện toàn bộ suy nghĩ của họ ra bên ngoài. Vì là cô gái duy nhất trên hành tinh kì lạ này, tính mạng của Viola bị đe dọa. Todd quyết tâm bảo vệ Viola và cả hai bị cuốn vào cuộc phiêu lưu nguy hiểm. Từ đó, Todd dần khám phá ra năng lực đặc biệt của mình, và phát hiện ra những bí mật đen tối của hành tinh mà cậu đang sống..",
-//       "maNhom": "GP01",
-//       "ngayKhoiChieu": "2022-11-09T15:02:23.323",
-//       "danhGia": 9,
-//       "hot": true,
-//       "dangChieu": true,
-//       "sapChieu": false
-const menu = [
-    {
-        title: "Export report",
-        icon: <LocalPrintshopOutlinedIcon />
-    },
-    {
-        title: "Share",
-        icon: <ShareOutlinedIcon />
-    },
-    {
-        title: "Actions",
-        icon: <UnfoldMoreOutlinedIcon />
-    },
-]
-
-const actions = [
-    {
-        title: "Edit",
-        icon: <EditOutlinedIcon />,
-        action: 'edit'
-    },
-    {
-        title: "Delete",
-        icon: <DeleteOutline />,
-        action: 'delete'
-    },
-]
 
 const MovieList = () => {
-    const [movies, setMovies] = useState([]);
     const naigate = useNavigate()
+    const dispatch = useDispatch()
+    const { movies, loading, error } = useSelector(state => state.movie)
 
     const handleSelect = (action, id) => {
         switch (action) {
             case "delete": {
-                setMovies(movies.filter((item) => item.maPhim !== id));
+                dispatch(deleteMovie(id))
+                    .unwrap()
+                    .then(() => {
+                        toast.success("Delete Movie successfully")
+                        dispatch(getMovies())
+                    })
+                    .catch((error) => {
+                        toast.error(error.message)
+                    })
                 break
             }
+
             case "edit": {
                 naigate("/admin/movies/" + id)
                 break
             }
+
             default:
                 break
         }
 
     }
 
-    useEffect(() => {
-        (async () => {
-            const movies = await movieAPI.getMovies()
-
-            setMovies(movies)
-        })()
-    }, [])
-
     const columns = [
         {
             field: "hinhAnh",
             headerName: "Image",
-            width: 160,
+            flex: 2,
             renderCell: (params) => {
-                console.log(params)
                 return (<img src={params.value} width={80} alt="" />)
             }
         },
         {
             field: "tenPhim",
             headerName: "Name",
-            width: 200,
+            flex: 4,
         },
 
         {
             field: "moTa",
             headerName: "Desciption",
-            width: 220
-        },
-        {
-            field: "status",
-            headerName: "Status",
-            width: 120,
-            renderCell: (params) => (
-                <div>{params.dangChieu || params.sapChieu || params.hot}</div>
-            )
+            flex: 4,
         },
         {
             field: "ngayKhoiChieu",
             headerName: "Showtime",
-            width: 120,
+            flex: 3,
         },
         {
             field: "action",
             headerName: "More",
             description: "Do more action with this",
             sortable: false,
-            width: 60,
+            flex: 1,
             renderCell: (params) => {
                 return (
                     <MoreMenu items={actions} placement='bottom-end' onChange={({ action }) => { handleSelect(action, params.row.maPhim) }}>
@@ -132,13 +90,51 @@ const MovieList = () => {
         },
     ];
 
+    const menu = [
+        {
+            title: "Export report",
+            icon: <LocalPrintshopOutlinedIcon />
+        },
+        {
+            title: "Share",
+            icon: <ShareOutlinedIcon />
+        },
+        {
+            title: "Actions",
+            icon: <UnfoldMoreOutlinedIcon />
+        },
+    ]
+
+    const actions = [
+        {
+            title: "Edit",
+            icon: <EditOutlinedIcon />,
+            action: 'edit'
+        },
+        {
+            title: "Delete",
+            icon: <DeleteOutline />,
+            action: 'delete'
+        },
+    ]
+
+
+    useEffect(() => {
+        dispatch(getMovies())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <div className={styles.wrapper}>
             <header className={styles.header}>
                 <h2>Movies</h2>
                 <div className={styles.control}>
-                    <Button solid leftIcon={<AddOutlinedIcon />}>
-                        <Link to='/admin/v1/movies/new'>Add Movie</Link>
+                    <Button
+                        to='/admin/movies/new'
+                        solid
+                        leftIcon={<AddOutlinedIcon />}
+                    >
+                        Add Movie
                     </Button>
                     <MoreMenu items={menu} placement='bottom-end'>
                         <MoreVertOutlinedIcon fontSize='inherit' />
@@ -151,8 +147,8 @@ const MovieList = () => {
                 getRowId={(row) => row.maPhim}
                 rowsPerPageOptions={[10]}
                 pageSize={10}
-                autoHeight
-                rowHeight={80}
+                loading={loading}
+                error={error ? error : null}
             />
         </div>
     )

@@ -1,0 +1,58 @@
+.wrapper {
+    width: 100%;
+    min-height: 100%;
+}
+
+.header {
+    margin-bottom: 20px;
+}
+
+.container {
+    position: relative;
+    padding: 20px;
+    color: var(--text-color);
+
+    h3 {
+        margin-bottom: 30px;
+    }
+}
+
+.editBtn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+
+.deleteBtn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--error-color);
+    color: rgb(255, 255, 255);
+}
+
+.infoWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .info {
+        display: flex;
+
+        h5 {
+            width: 120px;
+            flex-shrink: 0;
+            font-weight: 600;
+            font-size: 1.6rem;
+        }
+    }
+}
+
+.image {
+    display: flex;
+
+    img {
+        width: min(200px, 100%);
+        object-fit: cover;
+    }
+}

@@ -30,7 +30,10 @@ const TreeItem = ({ node }) => {
 
     return (
         <Component {...props} className={componentClass}>
-            <div className={cx("title")} onClick={() => setExpanded(!isExpanded)}>
+            <div
+                className={cx("title")}
+                onClick={() => setExpanded(!isExpanded)}
+            >
                 {node.icon && (
                     <div className={cx("iconView")}>
                         {node.icon}

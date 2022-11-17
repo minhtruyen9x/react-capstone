@@ -1,25 +1,36 @@
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
 
 import Grid from '@mui/material/Unstable_Grid2';
 
-import Button from '../../components/Button'
-import TextField from '../../components/TextField'
-import cameraImg from '../../assets/images/camera.png'
+import Button from '../../../components/Button';
+import Modal from '../../../components/Modal';
+import TextField from '../../../components/TextField';
+import StyledSelect from '../../../components/Select';
+import avatarDefault from '../../../assets/images/avatar-default.png'
 
-import userAPI from '../../services/userAPI'
-import useRequest from '../../hooks/useRequest'
-import StyledSelect from '../../components/Select/CustomSelect';
+import { getUserInfo } from '../../../slices/userSlice'
+import useRequest from '../../../hooks/useRequest'
+import userAPI from '../../../services/userAPI'
 
-import styles from './UserNew.module.scss'
+import styles from './UserEditFormModal.module.scss'
 
-const UserNew = () => {
-    const createUser = useRequest(userAPI.createUser, { manual: true })
+const UserEditFormModal = ({ open, onClose }) => {
+    const { id } = useParams()
+    const dispatch = useDispatch()
+    const { selectedUser } = useSelector(state => state.user)
+
+    const updateUser = useRequest(userAPI.updateUser, { manual: true })
+
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset,
+        setValue,
         control
     } = useForm({
         defaultValues: {
@@ -31,28 +42,68 @@ const UserNew = () => {
             maLoaiNguoiDung: ""
         }
     })
-    console.log("reset")
-    const onSubmit = (values) => {
-        createUser.runAsync(values)
+
+    const handleToggle = (evt) => {
+        evt.preventDefault()
+        reset()
+        onClose()
+    }
+
+    useEffect(() => {
+        for (const [key, value] of Object.entries(selectedUser)) {
+            setValue(key, value)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open])
+
+    const onSubmit = async (values) => {
+        updateUser.runAsync(values)
             .then(() => {
-                toast.success("create user success")
-                reset()
+                toast.success("Update user successfully")
+                onClose()
+                dispatch(getUserInfo(id))
             })
-            .catch(() => {
-                toast.error("something went wrong, please try again")
+            .catch(error => {
+                toast.error(error)
             })
     }
 
     return (
-        <div className={styles.wrapper}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <Modal
+            open={open}
+            title="Edit User"
+            onClose={handleToggle}
+            footer={(
+                <>
+                    <div className={styles.control}>
+                        <Button
+                            solid
+                            onClick={handleSubmit(onSubmit)}
+                            disable={updateUser.loading}
+                        >
+                            Update
+                        </Button>
+                        <Button
+                            solid
+                            onClick={handleToggle}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
+                    {updateUser.error &&
+                        <p className={styles.errorMess}>{updateUser.error}</p>}
+                </>
+            )}
+        >
+            <form >
                 <Grid container spacing={4} disableEqualOverflow>
-                    <Grid xs={12} sm={12} md={4} display="flex" justifyContent="center" alignItems="flex-start">
-                        <div className={styles.image}>
-                            <img src={cameraImg} alt="" />
+                    <Grid xs={12} display="flex" justifyContent="center">
+                        <div className={styles.avatar}>
+                            <img src={selectedUser.hinhAnh || avatarDefault} alt="" />
+                            <span>No Images</span>
                         </div>
                     </Grid>
-                    <Grid xs={12} sm={12} md={8} container spacing={4}>
+                    <Grid xs={12} container spacing={4}>
                         <Grid xs={12}>
                             <input type="file" />
                         </Grid>
@@ -139,21 +190,11 @@ const UserNew = () => {
                                 )}
                             />
                         </Grid>
-                        <div className={styles.control}>
-                            <Button solid primary disable={createUser.loading}>Create</Button>
-                        </div>
-                        {createUser.error && <p className={styles.errorMess}>{createUser.error}</p>}
                     </Grid>
                 </Grid>
             </form>
-        </div>
+        </Modal>
     )
 }
 
-export default UserNew
-
-
-
-
-
-
+export default UserEditFormModal

@@ -13,7 +13,10 @@ const Modal = ({ open, onClose, title, footer, children }) => {
             <div className={styles.wrapper}>
                 <header className={styles.header}>
                     <h3>{title}</h3>
-                    <button onClick={onClose} className={styles.closeBtn}>
+                    <button
+                        onClick={onClose}
+                        className={styles.closeBtn}
+                    >
                         <CloseOutlinedIcon fontSize='inherit' color='inherit' />
                     </button>
                 </header>

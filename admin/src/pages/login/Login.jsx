@@ -55,7 +55,6 @@ const Login = () => {
                                     message: "username is required"
                                 }
                             })}
-
                             error={errors.taiKhoan && errors.taiKhoan.message}
                         />
                         <TextField
@@ -70,10 +69,10 @@ const Login = () => {
                         />
                         <div className={styles.control}>
                             <div className={styles.remember}>
-                                <input type="checkbox" name="" id="remember" />
-                                <label htmlFor='remember'>Remember me</label>
+                                <input type="checkbox" name="" id={styles.remember} checked readOnly />
+                                <label htmlFor={styles.remember}>Remember me</label>
                             </div>
-                            <a href="/" className={styles.link}>Forgot Password?</a>
+                            <Link to="/forgot-password" className={styles.link}>Forgot Password?</Link>
                         </div>
                         {error && <p className={styles.errorMess}>{error}</p>}
                         <Button solid primary large disable={loading} rightIcon={loading && <RotateRightIcon />}>

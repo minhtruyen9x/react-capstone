@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -15,6 +16,7 @@ import useRequest from '../../hooks/useRequest';
 const Register = () => {
     const navigate = useNavigate()
     const registerRequest = useRequest(authAPI.register, { manual: true })
+    const [isAccept, setIsAccept] = useState(false)
 
     const { register, handleSubmit, formState: { errors }, watch } = useForm({
         defaultValues: { taiKhoan: "", matKhau: "", email: "", soDt: "", fisrtName: "", lastName: "", confirmPass: "" }
@@ -121,10 +123,17 @@ const Register = () => {
                             error={errors.confirmPass && errors.confirmPass.message}
                         />
                         <div className={styles.control}>
-                            <div className={styles.remember}>
-                                <input type="checkbox" name="" id="remember" />
-                                <label htmlFor='remember'>
-                                    I agree with <a href="/" className={styles.link}>Terms & Conditions</a> and have understood <a href="/" className={styles.link}>Privacy Policy</a>
+                            <div className={styles.accept}>
+                                <input
+                                    type="checkbox"
+                                    id={styles.accept}
+                                    onChange={() => setIsAccept(prev => !prev)}
+                                />
+                                <label htmlFor={styles.accept}>
+                                    I agree with
+                                    <Link to="/contract-lience" className={styles.link}>Terms & Conditions</Link>
+                                    and have understood
+                                    <Link to='/policy' className={styles.link}>Privacy Policy </Link>
                                 </label>
                             </div>
                         </div>
@@ -133,7 +142,7 @@ const Register = () => {
                             solid
                             primary
                             large
-                            disable={registerRequest.loading}
+                            disable={registerRequest.loading || !isAccept}
                         >
                             Register
                         </Button>

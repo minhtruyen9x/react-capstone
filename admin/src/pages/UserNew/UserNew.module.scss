@@ -1,7 +1,6 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     padding: 20px;
     background-color: var(--bg-light-color);
     border-radius: 8px;
@@ -9,12 +8,8 @@
 
     .image {
         display: flex;
-        flex-direction: column;
-        // justify-content: center;
-        width: 120px;
-        height: 120px;
-        padding: 20px;
-
+        width: min(300px, 100%);
+        padding: 40px;
         border-radius: 50%;
         align-items: center;
         background-color: var(--bg-color);
@@ -24,8 +19,7 @@
         font-size: 1.2rem;
 
         img {
-            width: 60px;
-
+            width: 100%;
         }
     }
 

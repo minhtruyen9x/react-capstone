@@ -1,28 +1,37 @@
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import { toast } from 'react-toastify';
+
 import Grid from '@mui/material/Unstable_Grid2';
 
+import Button from '../../../components/Button';
+import Modal from '../../../components/Modal';
+import TextField from '../../../components/TextField';
+import StyledSelect from '../../../components/Select';
 
-import styles from './MovieNew.module.scss'
-import Button from '../../components/Button'
-import TextField from '../../components/TextField'
-import StyledSelect from '../../components/Select/CustomSelect';
+import useRequest from '../../../hooks/useRequest'
+import movieAPI from '../../../services/movieAPI'
+import { getMovieDetail } from '../../../slices/movieSlice'
 
-import cameraImg from '../../assets/images/camera.png'
+import styles from './MovieEditFormModal.module.scss'
 
-import useRequest from '../../hooks/useRequest'
-import movieAPI from '../../services/movieAPI'
-import { useState } from 'react';
-
-const MovieNew = () => {
+const MovieEditFormModal = ({ open = false, onClose }) => {
+    const { id } = useParams()
+    const dispatch = useDispatch()
     const [previewImage, setPreviewImage] = useState("")
-    const createMovie = useRequest(movieAPI.createMovie, { manual: true })
+    const { selectedMovie } = useSelector(state => state.movie)
+
+    const updateMovie = useRequest(movieAPI.updateMovie, { manual: true })
+
     const {
         register,
-        formState: { errors },
         handleSubmit,
+        formState: { errors },
         reset,
         getValues,
+        setValue,
         control
     } = useForm({
         defaultValues: {
@@ -36,44 +45,81 @@ const MovieNew = () => {
             dangChieu: "",
             sapChieu: "",
             hot: ""
-        }
+        },
     })
-
-    const onSubmit = async (values) => {
-        const formData = new FormData()
-        values.hinhAnh = values.hinhAnh[0]
-        for (const [key, value] of Object.entries(values)) {
-            formData.append(key, value)
-        }
-
-        createMovie.runAsync(formData)
-            .then(() => {
-                toast.success("Create a new Movie successfully")
-                setPreviewImage("")
-                reset()
-            })
-            .catch((error) => {
-                toast.error(error)
-            })
-    }
 
     const handlePreviewImage = () => {
         URL.revokeObjectURL(previewImage)
         const file = getValues("hinhAnh")[0]
-        if (file) {
+        if (file && file instanceof File) {
             const imageURL = URL.createObjectURL(file)
             setPreviewImage(imageURL)
         }
     }
 
+    useEffect(() => {
+        for (const [key, value] of Object.entries(selectedMovie)) {
+            setValue(key, value)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open])
 
+    const onSubmit = async (values) => {
+        const formData = new FormData()
+        console.log(values)
+
+        for (const [key, value] of Object.entries(values)) {
+            formData.append(key, value)
+        }
+
+        updateMovie.runAsync(formData)
+            .then(() => {
+                toast.success("Update film successfully")
+                console.log("asdas")
+                onClose()
+                dispatch(getMovieDetail(id))
+            })
+            .catch(error => {
+                toast.error(error)
+            })
+    }
+
+    const handleCloseForm = () => {
+        onClose()
+        reset()
+    }
     return (
-        <div className={styles.wrapper}>
+        <Modal
+            open={open}
+            title="Edit User"
+            onClose={handleCloseForm}
+            footer={(
+                <>
+                    <div className={styles.control}>
+                        <Button
+                            solid
+                            onClick={handleSubmit(onSubmit)}
+                            disable={updateMovie.loading}
+                        >
+                            Update
+                        </Button>
+                        <Button
+                            solid
+                            onClick={handleCloseForm}
+                        >
+                            Cancel
+                        </Button>
+                    </div>
+                    {updateMovie.error &&
+                        <p className={styles.errorMess}>{updateMovie.error}</p>}
+                </>
+            )}
+        >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={4} disableEqualOverflow>
                     <Grid xs={12} md={4} display="flex" justifyContent="center" alignItems="flex-start">
-                        <div className={`${styles.image} ${previewImage ? "" : styles.noImage}`}>
-                            <img src={previewImage || cameraImg} alt="" />
+                        <div className={styles.image}>
+                            <img src={previewImage || selectedMovie.hinhAnh} alt="" />
                         </div>
                     </Grid>
                     <Grid xs={12} md={8} container spacing={4}>
@@ -81,10 +127,6 @@ const MovieNew = () => {
                             <TextField
                                 type="file"
                                 {...register('hinhAnh', {
-                                    required: {
-                                        value: true,
-                                        message: "Image is required"
-                                    },
                                     onChange: () => handlePreviewImage()
                                 })}
                                 error={errors.hinhAnh?.message}
@@ -156,9 +198,12 @@ const MovieNew = () => {
                             <TextField
                                 label="Rating"
                                 type='number'
-                                min='0'
-                                max='10'
-                                {...register('danhGia')}
+                                {...register('danhGia', {
+                                    valueAsNumber: true,
+                                    min: 0,
+                                    max: 10
+                                })}
+                                error={errors.danhGia && "Rating Point in range 0-10"}
                             />
                         </Grid>
                         <Grid xs={12} sm={6}>
@@ -209,21 +254,11 @@ const MovieNew = () => {
                                 )}
                             />
                         </Grid>
-                        <div className={styles.control}>
-                            <Button
-                                solid
-                                primary
-                                disable={createMovie.loading}
-                            >
-                                Create
-                            </Button>
-                        </div>
                     </Grid>
                 </Grid>
-                {createMovie.error && <p className={styles.errorMess}>{createMovie.error}</p>}
             </form>
-        </div>
+        </Modal>
     )
 }
 
-export default MovieNew
+export default MovieEditFormModal

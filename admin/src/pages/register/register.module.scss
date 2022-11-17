@@ -17,8 +17,6 @@
     background-repeat: no-repeat;
     background-position: top left;
     background-size: 20%;
-
-
 }
 
 .logo {
@@ -36,6 +34,7 @@
 .link {
     color: var(--link-color);
     font-size: 1.4rem;
+    margin: 0 4px;
 
     &:hover {
         text-decoration: underline;
@@ -89,7 +88,7 @@
     align-items: center;
     justify-content: space-between;
 
-    .remember {
+    .accept {
         display: flex;
         align-items: flex-start;
         color: var(--text-light-color);
@@ -103,8 +102,6 @@
         }
 
     }
-
-
 }
 
 // button

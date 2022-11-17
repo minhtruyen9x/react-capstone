@@ -13,7 +13,13 @@ const MenuItem = ({ item = {}, onClick }) => {
     return (
         <>
             {item.seperate && <Divider />}
-            <Button className={customClass} leftIcon={item.icon} to={item.to} onClick={onClick} fullWidth>
+            <Button
+                fullWidth
+                className={customClass}
+                leftIcon={item.icon}
+                to={item.to}
+                onClick={onClick}
+            >
                 {item.title}
             </Button>
         </>

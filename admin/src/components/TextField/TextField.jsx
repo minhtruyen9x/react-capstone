@@ -11,7 +11,10 @@ const TextField = forwardRef(({ type = "text", label, onChange, className, error
         type = null
     }
     return (
-        <div className={cx("wrapper", { [className]: className })}>
+        <div className={cx(
+            "wrapper",
+            { [className]: className }
+        )}>
             <Component
                 className={styles.input}
                 type={type}

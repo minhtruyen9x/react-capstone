@@ -16,7 +16,7 @@ const TableData = ({ rows, columns, ...passProps }) => {
             rows={rows}
             disableSelectionOnClick
             columns={columns}
-            pagination
+            // pagination
             disableColumnMenu={true}
             components={{
                 NoRowsOverlay: CustomNoRowsOverlay,

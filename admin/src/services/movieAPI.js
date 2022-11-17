@@ -6,19 +6,24 @@ const movieAPI = {
         return fetcher("/QuanLyPhim/LayDanhSachBanner")
     },
 
-    getMovieDetail: (maPhim) => {
-        return fetcher("/QuanLyPhim/LayDanhSachPhim", {
+    getMovieDetail: (MaPhim) => {
+        return fetcher("/QuanLyPhim/LayThongTinPhim", {
             params: {
-                maPhim
+                maNhom: "GP15",
+                MaPhim
             }
         })
     },
 
     getMovies: () => {
-        return fetcher("/QuanLyPhim/LayDanhSachPhim")
+        return fetcher("/QuanLyPhim/LayDanhSachPhim", {
+            params: {
+                maNhom: "GP15"
+            }
+        })
     },
 
-    getMoviesPagination: ({ ...values }) => {
+    getMoviesPagination: (values) => {
         return fetcher("/QuanLyPhim/LayDanhSachPhimPhanTrang", {
             params: {
                 maNhom: "GP15",
@@ -27,7 +32,7 @@ const movieAPI = {
         })
     },
 
-    getMovieByDay: ({ ...values }) => {
+    getMovieByDay: (values) => {
         return fetcher("/QuanLyPhim/LayDanhSachPhimTheoNgay", {
             params: {
                 maNhom: "GP15",
@@ -36,11 +41,12 @@ const movieAPI = {
         })
     },
 
-    createMovie: ({ ...values }) => {
+    createMovie: (values) => {
+        values.append("maNhom", "GP15")
         return fetcher.post("/QuanLyPhim/ThemPhimUploadHinh", values)
     },
 
-    updateMovie: ({ ...values }) => {
+    updateMovie: (values) => {
         return fetcher.post("/QuanLyPhim/CapNhatPhimUpload", values)
     },
 
