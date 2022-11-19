@@ -12,6 +12,7 @@ import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 
 import styles from './MovieList.module.scss'
 import Button from '../../components/Button'
@@ -43,11 +44,49 @@ const MovieList = () => {
                 break
             }
 
+            case "add-schedule": {
+                naigate("/admin/movies/" + id)
+                break
+            }
+
             default:
                 break
         }
 
     }
+    const actions = [
+
+        {
+            title: "Edit",
+            icon: <EditOutlinedIcon />,
+            action: 'edit'
+        },
+        {
+            title: "Schedule",
+            icon: <CalendarMonthOutlinedIcon />,
+            action: 'add-schedule'
+        },
+        {
+            title: "Delete",
+            icon: <DeleteOutline />,
+            action: 'delete'
+        }
+    ]
+
+    const menu = [
+        {
+            title: "Export report",
+            icon: <LocalPrintshopOutlinedIcon />
+        },
+        {
+            title: "Share",
+            icon: <ShareOutlinedIcon />
+        },
+        {
+            title: "Actions",
+            icon: <UnfoldMoreOutlinedIcon />
+        },
+    ]
 
     const columns = [
         {
@@ -89,35 +128,6 @@ const MovieList = () => {
             },
         },
     ];
-
-    const menu = [
-        {
-            title: "Export report",
-            icon: <LocalPrintshopOutlinedIcon />
-        },
-        {
-            title: "Share",
-            icon: <ShareOutlinedIcon />
-        },
-        {
-            title: "Actions",
-            icon: <UnfoldMoreOutlinedIcon />
-        },
-    ]
-
-    const actions = [
-        {
-            title: "Edit",
-            icon: <EditOutlinedIcon />,
-            action: 'edit'
-        },
-        {
-            title: "Delete",
-            icon: <DeleteOutline />,
-            action: 'delete'
-        },
-    ]
-
 
     useEffect(() => {
         dispatch(getMovies())

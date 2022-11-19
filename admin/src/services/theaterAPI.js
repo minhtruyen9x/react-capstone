@@ -2,7 +2,7 @@ import fetcher from './fetcher'
 
 
 const theaterAPI = {
-    getTheaterCenters: (maHeThongRap) => {
+    getCenters: (maHeThongRap) => {
         return fetcher("/QuanLyRap/LayThongTinHeThongRap", {
             params: {
                 maHeThongRap
@@ -10,7 +10,7 @@ const theaterAPI = {
         })
     },
 
-    getTheater: (maHeThongRap) => {
+    getTheaters: (maHeThongRap) => {
         return fetcher("/QuanLyRap/LayThongTinCumRapTheoHeThong", {
             params: {
                 maHeThongRap

@@ -58,9 +58,11 @@ const MovieEditFormModal = ({ open = false, onClose }) => {
     }
 
     useEffect(() => {
+        if (!open) return
         for (const [key, value] of Object.entries(selectedMovie)) {
             setValue(key, value)
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open])
 

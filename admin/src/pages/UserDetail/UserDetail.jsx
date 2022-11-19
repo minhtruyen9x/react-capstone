@@ -47,6 +47,7 @@ const UserDetail = () => {
     if (error) {
         return <CustomErrorOverLay />
     }
+
     const columns = [
         {
             field: "maVe",

@@ -16,6 +16,7 @@ const Header = () => {
 
     return (
         <div className={styles.wrapper}>
+            <div className={styles.sidebarToggleBtn}></div>
             <div className={styles.searchBar}>
                 <input type="text" className={styles.searchInput} placeholder="Search here" />
                 {loading ?

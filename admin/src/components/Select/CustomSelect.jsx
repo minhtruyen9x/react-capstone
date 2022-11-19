@@ -1,9 +1,13 @@
+import PropTypes from 'prop-types';
+
 import { styled } from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
+import CustomNoRowsOverlay from '../TableData/CustomNoRowsOverlay'
+import CustomLoadingOverlay from '../TableData/CustomLoadingOverlay'
 
 const CustomSelect = styled(FormControl)`
     border-radius:6px;
@@ -82,7 +86,8 @@ const StyledSelect = ({
     label,
     formRegister,
     error,
-    defaultValue = ''
+    defaultValue = '',
+    loading
 }) => {
 
     return (
@@ -93,15 +98,28 @@ const StyledSelect = ({
                 label={label}
                 defaultValue={defaultValue}
             >
-                {options.map(option => (
-                    <CustomMenuItem value={option.value} key={option.value}>
-                        {option.label}
-                    </CustomMenuItem>
-                ))}
+                {loading ?
+                    <CustomLoadingOverlay /> :
+                    options.length === 0 ?
+                        <CustomNoRowsOverlay /> :
+                        options.map(option => (
+                            <CustomMenuItem value={option.value} key={option.value}>
+                                {option.label}
+                            </CustomMenuItem>
+                        ))}
             </Select>
             {error && <p className='errorMess'>{error}</p>}
         </CustomSelect>
     );
+}
+
+StyledSelect.propTypes = {
+    options: PropTypes.array,
+    label: PropTypes.string,
+    formRegister: PropTypes.object,
+    error: PropTypes.any,
+    defaultValue: PropTypes.any,
+    loading: PropTypes.bool
 }
 
 export default StyledSelect

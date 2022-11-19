@@ -50,9 +50,11 @@ const UserEditFormModal = ({ open, onClose }) => {
     }
 
     useEffect(() => {
+        if (!open) return
         for (const [key, value] of Object.entries(selectedUser)) {
             setValue(key, value)
         }
+        console.log("render")
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open])
 

@@ -7,12 +7,14 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import Box from '../../components/Box';
 import Button from '../../components/Button';
+import TableData from '../../components/TableData';
 import CustomLoadingOverlay from '../../components/TableData/CustomLoadingOverlay';
 import CustomErrorOverLay from '../../components/TableData/CustomErrorOverLay';
 
 import { getMovieDetail, deleteMovie } from '../../slices/movieSlice'
 import Paragraph from '../../components/Paragraph';
 import MovieEditFormModal from './MovieEditFormModal';
+import MovieScheduleFormModal from './MovieScheduleFormModal';
 
 import styles from './MovieDetail.module.scss'
 
@@ -21,7 +23,8 @@ const MovieDetail = () => {
     const dispatch = useDispatch()
     const { selectedMovie, loading, error } = useSelector(state => state.movie)
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpenEditForm, setIsOpenEditForm] = useState(false)
+    const [isOpenScheduleForm, setIsOpenScheduleForm] = useState(false)
 
     useEffect(() => {
         dispatch(getMovieDetail(id))
@@ -47,6 +50,36 @@ const MovieDetail = () => {
         return <CustomErrorOverLay />
     }
 
+    const columns = [
+        {
+            field: "maHeThongRap",
+            headerName: "Center ID",
+            flex: 1
+        },
+        {
+            field: "tenHeThongRap",
+            headerName: "Center name",
+            renderCell: (params) => (
+                <div className={styles.centerName}>
+                    <img src={params.row.logo} alt="" />
+                    <span>{params.row.tenHeThongRap}</span>
+                </div>
+            ),
+            flex: 2
+        },
+        {
+            field: "heThongRapChieu",
+            headerName: "Number of Schedule",
+            flex: 1,
+            valueGetter: (params) => params.row.cumRapChieu.length
+        }
+    ];
+
+    // <Collapse in={open} timeout="auto" unmountOnExit>
+    //     <Box sx={{ margin: 1 }}>
+
+    //     </Box>
+    // </Collapse>
     return (
         <div className={styles.wrapper}>
             <header className={styles.header}>
@@ -54,57 +87,77 @@ const MovieDetail = () => {
             </header>
             {/******** Movie Information ***********/}
             <Grid container spacing={2}>
-                <Box className={styles.container}>
-                    <h3>Basic Infomation</h3>
-                    <Grid container spacing={2}>
-                        <Button solid className={styles.editBtn} onClick={() => setIsOpen(!isOpen)}>Edit</Button>
-                        <Button solid className={styles.deleteBtn} onClick={handleDelete}>Delete</Button>
-                        <Grid xs={12} md={4} display='flex' alignItems="center" justifyContent="center">
-                            <div className={styles.image}>
-                                <img src={selectedMovie.hinhAnh} alt="" />
-                            </div>
+                <Grid xs={12}>
+                    <Box className={styles.container}>
+                        <h3>Basic Infomation</h3>
+                        <Grid container spacing={2}>
+                            <Button solid className={styles.editBtn} onClick={() => setIsOpenEditForm(!isOpenEditForm)}>Edit</Button>
+                            <Button solid className={styles.scheduleBtn} onClick={() => setIsOpenScheduleForm(!isOpenScheduleForm)}>Schedule</Button>
+                            <Button solid className={styles.deleteBtn} onClick={handleDelete}>Delete</Button>
+                            <Grid xs={12} md={4} display='flex' alignItems="center" justifyContent="center">
+                                <div className={styles.image}>
+                                    <img src={selectedMovie.hinhAnh} alt="" />
+                                </div>
+                            </Grid>
+                            <Grid xs={12} md={8}>
+                                <div className={styles.infoWrapper}>
+                                    <div className={styles.info}>
+                                        <h5>Movie ID:</h5>
+                                        <span>{selectedMovie.maPhim}</span>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <h5>Name:</h5>
+                                        <span>{selectedMovie.tenPhim}</span>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <h5>Trailer:</h5>
+                                        <span>{selectedMovie.trailer}</span>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <h5>Rating:</h5>
+                                        <span>{selectedMovie.danhGia}</span>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <h5>Show day</h5>
+                                        <span>{selectedMovie.ngayKhoiChieu}</span>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <h5>Status:</h5>
+                                        <span>
+                                            {selectedMovie.sapChieu}
+                                            {selectedMovie.dangChieu}
+                                            {selectedMovie.hot}
+                                        </span>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <h5>Description:</h5>
+                                        <Paragraph maxCharacters={130}>{selectedMovie.moTa}</Paragraph>
+                                    </div>
+                                </div>
+                            </Grid>
                         </Grid>
-                        <Grid xs={12} md={8}>
-                            <div className={styles.infoWrapper}>
-                                <div className={styles.info}>
-                                    <h5>Movie ID:</h5>
-                                    <span>{selectedMovie.maPhim}</span>
-                                </div>
-                                <div className={styles.info}>
-                                    <h5>Name:</h5>
-                                    <span>{selectedMovie.tenPhim}</span>
-                                </div>
-                                <div className={styles.info}>
-                                    <h5>Trailer:</h5>
-                                    <span>{selectedMovie.trailer}</span>
-                                </div>
-                                <div className={styles.info}>
-                                    <h5>Rating:</h5>
-                                    <span>{selectedMovie.danhGia}</span>
-                                </div>
-                                <div className={styles.info}>
-                                    <h5>Show day</h5>
-                                    <span>{selectedMovie.ngayKhoiChieu}</span>
-                                </div>
-                                <div className={styles.info}>
-                                    <h5>Status:</h5>
-                                    <span>
-                                        {selectedMovie.sapChieu}
-                                        {selectedMovie.dangChieu}
-                                        {selectedMovie.hot}
-                                    </span>
-                                </div>
-                                <div className={styles.info}>
-                                    <h5>Description:</h5>
-                                    <Paragraph maxCharacters={130}>{selectedMovie.moTa}</Paragraph>
-                                </div>
-                            </div>
-                        </Grid>
-                    </Grid>
-                </Box>
+                    </Box>
+                </Grid>
+                <Grid xs={12}>
+                    <Box className={styles.container}>
+                        <h3>Advance Infomation</h3>
+                        <TableData
+                            rows={selectedMovie.schedule?.heThongRapChieu || []}
+                            columns={columns}
+                            getRowId={(row) => row.maHeThongRap}
+                            rowsPerPageOptions={[10]}
+                            pageSize={10}
+                            loading={loading}
+                            error={error ? error : null}
+                            autoHeight
+                        />
+                    </Box>
+                </Grid>
             </Grid>
             {/******** Movie edit modal ***********/}
-            <MovieEditFormModal open={isOpen} onClose={() => setIsOpen(!isOpen)} />
+            <MovieEditFormModal open={isOpenEditForm} onClose={() => setIsOpenEditForm(!isOpenEditForm)} />
+            {/******** Movie Schedule modal ***********/}
+            <MovieScheduleFormModal open={isOpenScheduleForm} onClose={() => setIsOpenScheduleForm(!isOpenScheduleForm)} />
         </div >
     )
 }

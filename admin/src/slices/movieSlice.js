@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import movieAPI from '../services/movieAPI'
+import theaterAPI from '../services/theaterAPI'
 
 const initialState = {
     movies: [],
@@ -25,8 +26,11 @@ export const getMovieDetail = createAsyncThunk(
     "movie/getMovieDetail",
     async (maPhim) => {
         try {
-            const data = await movieAPI.getMovieDetail(maPhim)
-            return data
+            const [movieBasicInfo, movieSchedule] = await Promise.all([movieAPI.getMovieDetail(maPhim), theaterAPI.getMovieSchedule(maPhim)])
+            return {
+                ...movieBasicInfo,
+                schedule: movieSchedule
+            }
         } catch (error) {
             throw error
         }

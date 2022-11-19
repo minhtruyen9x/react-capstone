@@ -40,6 +40,7 @@ const useRequest = (service, options = {
     useEffect(() => {
         if (isManual) return
         run()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return { run, runAsync, ...status }
