@@ -12,9 +12,9 @@ const initialState = {
 
 export const getMovies = createAsyncThunk(
     "movie/getMovies",
-    async () => {
+    async (tenPhim) => {
         try {
-            const data = await movieAPI.getMovies()
+            const data = await movieAPI.getMovies(tenPhim)
             return data
         } catch (error) {
             throw error

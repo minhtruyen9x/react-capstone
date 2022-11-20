@@ -1,37 +1,21 @@
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import SyncIcon from '@mui/icons-material/Sync';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-
+import classNames from 'classnames/bind';
 
 import Button from '../../../components/Button'
-import Divider from '../../../components/Divider'
 import ThemeToggle from './ThemeToggle';
+import AccountMenu from './AccountMenu';
+import SearchBar from '../../../components/SearchBar';
 
 import styles from './Header.module.scss'
-import AccountMenu from './AccountMenu';
+const cx = classNames.bind(styles)
 
 const Header = () => {
-    const loading = false
-
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.sidebarToggleBtn}></div>
-            <div className={styles.searchBar}>
-                <input type="text" className={styles.searchInput} placeholder="Search here" />
-                {loading ?
-                    <SyncIcon className={styles.icon} fontSize="inherit" /> :
-                    <ClearOutlinedIcon className={styles.icon} fontSize="inherit" />
-                }
-
-                <button className={styles.submit}>
-                    <SearchOutlinedIcon fontSize="inherit" />
-                </button>
-            </div>
-            <div className={styles.control}>
+        <div className={cx("wrapper")}>
+            <SearchBar />
+            <div className={cx("control")}>
                 <ThemeToggle />
-                <Divider orientation='vertical'></Divider>
-                <Button className={styles.notificates}>
+                <Button className={cx("notificates")}>
                     <NotificationsNoneOutlinedIcon fontSize='inherit' />
                 </Button>
                 <AccountMenu />

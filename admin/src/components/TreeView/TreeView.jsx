@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { memo } from 'react'
 import classnames from 'classnames/bind'
 import styles from './Tree.module.scss'
 
@@ -23,4 +24,4 @@ TreeView.propTypes = {
     visible: PropTypes.bool
 }
 
-export default TreeView
+export default memo(TreeView)

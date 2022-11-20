@@ -10,9 +10,9 @@ const initialState = {
 
 export const getUsers = createAsyncThunk(
     "user/getUsers",
-    async () => {
+    async (tuKhoa) => {
         try {
-            const data = await userAPI.getUsers()
+            const data = await userAPI.getUsers(tuKhoa)
             return data
         } catch (error) {
             throw error

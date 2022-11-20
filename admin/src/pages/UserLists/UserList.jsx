@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from 'react-toastify'
 
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
@@ -14,16 +14,19 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 
 import styles from './UserList.module.scss'
 import Button from '../../components/Button'
+import SearchBar from '../../components/SearchBar'
 import MoreMenu from '../../components/MoreMenu'
 import TableData from '../../components/TableData'
 
 import { getUsers, deleteUser } from '../../slices/userSlice'
+import useDebounce from "../../hooks/useDebounce"
 
 const UserList = () => {
     const dispatch = useDispatch()
     const { users, loading, error } = useSelector(state => state.user)
+    const [searchParams, setSearchParams] = useSearchParams({ tuKhoa: "" })
+    const searchValue = useDebounce(searchParams.get("tuKhoa"), 300)
     const naigate = useNavigate()
-    console.log("das")
     const handleSelect = (action, id) => {
         switch (action) {
             case "delete": {
@@ -52,10 +55,11 @@ const UserList = () => {
     }
 
     useEffect(() => {
-        dispatch(getUsers())
+        dispatch(getUsers(searchValue))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [searchValue])
 
+    // menu dropdown cho table
     const menu = [
         {
             title: "Export report",
@@ -71,6 +75,7 @@ const UserList = () => {
         },
     ]
 
+    // menu dropdown cho mỗi table row
     const actionsMenu = [
         {
             title: "Edit",
@@ -84,7 +89,8 @@ const UserList = () => {
         },
     ]
 
-    const columns = [
+    // columns,các cột hiển thị trên table
+    const columns = useMemo(() => [
         {
             field: "hoTen",
             headerName: "Fullname",
@@ -125,16 +131,27 @@ const UserList = () => {
                     >
                         <MoreHorizOutlinedIcon />
                     </MoreMenu>
-                );
+                )
             },
         },
-    ];
+    ], [])
+    const handleRowId = useCallback((row) => {
+        return row.taiKhoan
+    }, [])
+    console.log(users)
 
     return (
         <div className={styles.wrapper}>
             <header className={styles.header}>
                 <h2>Users</h2>
                 <div className={styles.control}>
+                    <SearchBar
+                        outline
+                        placeholder="Find User"
+                        value={searchParams.get("tuKhoa")}
+                        onChange={(e) => setSearchParams({ tuKhoa: e.target.value })}
+                        onClearValue={() => setSearchParams()}
+                    />
                     <Button
                         to='/admin/users/new'
                         solid
@@ -150,9 +167,7 @@ const UserList = () => {
             <TableData
                 rows={users}
                 columns={columns}
-                getRowId={(row) => row.taiKhoan}
-                rowsPerPageOptions={[10]}
-                pageSize={10}
+                getRowId={handleRowId}
                 loading={loading}
                 error={error ? error : null}
             />

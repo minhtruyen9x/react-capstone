@@ -3,10 +3,11 @@ import localService from './localService'
 
 const userAPI = {
     getTypeUsers: () => {
-        return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDung")
+        return fetcher("/QuanLyNguoiDung/LayDanhSachLoaiNguoiDung")
     },
 
     getUsers: (tuKhoa) => {
+        if (!tuKhoa) tuKhoa = null
         return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDung", {
             params: {
                 maNhom: "GP15",
@@ -20,15 +21,6 @@ const userAPI = {
             params: {
                 maNhom: "GP15",
                 ...values
-            }
-        })
-    },
-
-    getUserByKey: (tuKhoa) => {
-        return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDung", {
-            params: {
-                maNhom: "GP15",
-                tuKhoa: tuKhoa
             }
         })
     },

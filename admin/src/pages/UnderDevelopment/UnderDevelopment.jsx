@@ -1,6 +1,6 @@
 import Grid from '@mui/material/Unstable_Grid2';
-import useTimer from '../../hooks/useTimer';
 
+import useTimer from '../../hooks/useTimer';
 import styles from './UnderDevelopment.module.scss'
 
 const UnderDevelopment = () => {
@@ -12,7 +12,7 @@ const UnderDevelopment = () => {
                 <p>Our Page is under construction</p>
             </div>
             <div className={styles.timer}>
-                <Grid container spacing={4}>
+                <Grid container spacing={{ xs: 1, md: 4 }}>
                     <Grid xs={3}>
                         <div className={styles.card}>
                             <p>{days}</p>

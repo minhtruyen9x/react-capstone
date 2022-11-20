@@ -1,62 +1,35 @@
-// .wrapper {
-//     height: 0;
-//     overflow: hidden;
-//     // transform: scaleY(0);
-//     transition: 0.3s;
-
-//     &.visible {
-//         height: var();
-//         // transform: scaleY(1);
-//     }
-
-// }
-
 .list {
     list-style: none;
-    // height: 0;
-
     transition: 0.3s;
     overflow: hidden;
-    // min-height: 0;
-
-    // &.visible {
-    // height: unset;
-    // min-height: var(--max-height);
-    // height: min(var(--max-height), 100%);
-    // margin-top: calc(var(--max-height)*-1);
-    // }
-
+    white-space: nowrap;
 }
 
 .item {
-    display: block;
-    padding-left: 20px;
-    user-select: none;
-
-    --icon-size: 20px;
-    --indicator-size: 8px;
+    --icon-size: 2.4rem;
+    --indicator-size: 4px;
     --stroke-width: 1px;
-    --stroke-height: 8px;
-    --indicator-color: rgb(65, 68, 73); //#414449
+    --stroke-height: 12px;
+    --indicator-color: rgb(144, 149, 156); //#414449
     --indicator-active-color: var(--primary-color); //#00BAC7
     --spacer: 4px;
-
+    display: block;
+    padding-left: var(--icon-size);
+    user-select: none;
 
     &.root {
         padding-left: 0;
 
         &>.title {
             padding: 6px 0;
+            font-weight: 500;
 
             &::before,
             &::after {
                 display: none;
             }
         }
-
     }
-
-
 
     .title {
         position: relative;
@@ -65,12 +38,17 @@
         justify-content: flex-start;
 
         line-height: 1;
+        color: var(--text-color);
         padding: 4px 0;
         padding-right: 20px;
-        color: var(--text-color);
         cursor: pointer;
 
         transition: 0.2s;
+
+        span {
+            margin-left: 4px;
+            width: 80%;
+        }
 
         &:hover {
             color: var(--text-hover-color);
@@ -82,13 +60,11 @@
             justify-content: center;
             min-width: var(--icon-size);
             min-height: var(--icon-size);
-            margin-right: 12px;
-            font-size: 20px;
+            font-size: var(--icon-size);
         }
 
         .iconToggle {
-            position: absolute;
-            right: 0;
+            margin-left: auto;
             font-size: 20px;
             display: flex;
             transition: 0.2s;
@@ -99,19 +75,18 @@
             position: absolute;
             width: var(--indicator-size);
             height: var(--indicator-size);
-            border: 2px solid var(--indicator-color);
-            border-radius: 50%;
+            border: 1px solid var(--indicator-color);
+            border-radius: 1px;
             left: calc(var(--icon-size) /2 * -1);
             transform: translateX(calc(var(--indicator-size)/2 * -1));
-
         }
 
         &::after {
             content: '';
             position: absolute;
             width: var(--stroke-width);
-            height: var(--stroke-height);
             background-color: var(--indicator-color);
+            height: var(--stroke-height);
             bottom: calc(50% + var(--indicator-size)/2 + var(--spacer));
             // top: calc(50% * -1);
             left: calc(var(--icon-size) /2 * -1);
@@ -121,17 +96,20 @@
     }
 
     &.active {
+
         &>.title::before {
             background-color: var(--indicator-active-color);
-            opacity: 0.8;
-            border: none;
+            // opacity: 0.8;
         }
 
+        &>.title {
+            color: var(--primary-color);
+        }
     }
 
     &.expanded>.title {
         .iconToggle {
-            transform: rotate(180deg);
+            transform: rotate(90deg);
         }
     }
 
@@ -141,7 +119,7 @@
 
     &.separate {
         border-top: 1px solid var(--border-color);
-        padding-top: 0.5em;
-        margin-top: 0.5em;
+        padding-top: 0.3em;
+        margin-top: 0.3em;
     }
 }

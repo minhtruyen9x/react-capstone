@@ -54,7 +54,7 @@ const Register = () => {
                     </div>
                     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                         <Grid container spacing={2}>
-                            <Grid xs={6} display="flex" flexDirection="column" gap={2}>
+                            <Grid xs={12} sm={6} display="flex" flexDirection="column" gap={2}>
                                 <TextField
                                     label="Fisrt name"
                                     {...register("fisrtName", {
@@ -66,7 +66,7 @@ const Register = () => {
                                     error={errors.fisrtName && errors.fisrtName.message}
                                 />
                             </Grid>
-                            <Grid xs={6} display="flex" flexDirection="column" gap={2}>
+                            <Grid xs={12} sm={6} display="flex" flexDirection="column" gap={2}>
                                 <TextField
                                     label="Last Name"
                                     {...register("lastName", {
@@ -106,6 +106,10 @@ const Register = () => {
                                 required: {
                                     value: true,
                                     message: "Email address is required"
+                                },
+                                pattern: {
+                                    value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                    message: "Your email is not match format xxx@xxx.xxx"
                                 }
                             })}
                             error={errors.email && errors.email.message}

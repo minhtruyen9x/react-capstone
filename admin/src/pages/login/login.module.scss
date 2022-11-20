@@ -17,8 +17,6 @@
     background-repeat: no-repeat;
     background-position: top left;
     background-size: 20%;
-
-
 }
 
 .logo {
@@ -52,6 +50,12 @@
     box-shadow: var(--box-shadow);
     -webkit-box-shadow: var(--box-shadow);
     -moz-box-shadow: var(--box-shadow);
+
+    @media (max-width:576px) {
+        & {
+            padding: 20px;
+        }
+    }
 
     .title {
         display: flex;
@@ -92,6 +96,14 @@
     justify-content: space-between;
     margin: 4px 0 12px;
 
+    @media (max-width:576px) {
+        & {
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+        }
+    }
+
     .remember {
         display: flex;
         align-items: flex-start;
@@ -104,10 +116,7 @@
             margin-right: 12px;
             height: 2rem;
         }
-
     }
-
-
 }
 
 // button

@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import DefaultLayout from './layouts/DefaultLayout'
+import Entry from './pages/Entry';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -13,13 +14,10 @@ import MovieNew from './pages/MovieNew';
 import MovieList from './pages/MovieList';
 import MovieDetail from './pages/MovieDetail';
 
-
 function App() {
   const { user } = useSelector(state => state.auth)
-  console.log("app route")
 
   const ProtectRoute = ({ children }) => {
-    console.log("protext route")
     if (!user) {
       return <Navigate to='/login' />
     }
@@ -34,7 +32,7 @@ function App() {
       <Routes>
         {/* Route */}
         {/* Route Public */}
-        <Route path='/' element={<Home />} />
+        <Route path='/' element={<Entry />} />
 
 
         {/* Route Authen */}
@@ -42,10 +40,9 @@ function App() {
         <Route path='/register' element={<Register />} />
 
 
-
         {/* Route Private */}
         <Route path='/admin' element={<ProtectRoute><DefaultLayout /></ProtectRoute>}>
-          <Route index element={<div>Welcom Back</div>} />
+          <Route index element={<Home />} />
           {/* user Routes */}
           <Route path='users' element={<UserList />} />
           <Route path='users/new' element={<UserNew />} />
@@ -56,9 +53,8 @@ function App() {
           <Route path='movies/:id' element={<MovieDetail />} />
 
 
-
           {/* Cinenma routes */}
-
+          {/* Underdevelopment*/}
 
 
           <Route path='*' element={<UnderDevelopment />} />

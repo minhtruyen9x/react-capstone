@@ -15,10 +15,20 @@ const movieAPI = {
         })
     },
 
-    getMovies: () => {
+    getMovies: (tenPhim) => {
+        // tenPhim là falsy thì data trả về là string "không tìm thấy" không phải mảng rỗng []
+        //  làm render gây lỗi ,vậy nên kiểm tra điều kiện
+        if (tenPhim) {
+            return fetcher("/QuanLyPhim/LayDanhSachPhim", {
+                params: {
+                    maNhom: "GP15",
+                    tenPhim
+                }
+            })
+        }
         return fetcher("/QuanLyPhim/LayDanhSachPhim", {
             params: {
-                maNhom: "GP15"
+                maNhom: "GP15",
             }
         })
     },

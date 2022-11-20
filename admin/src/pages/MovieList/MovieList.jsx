@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteMovie, getMovies } from "../../slices/movieSlice";
 import { toast } from 'react-toastify'
@@ -19,10 +19,16 @@ import Button from '../../components/Button'
 import MoreMenu from '../../components/MoreMenu'
 import TableData from '../../components/TableData'
 
+import useDebounce from "../../hooks/useDebounce";
+import SearchBar from "../../components/SearchBar";
+
 const MovieList = () => {
     const naigate = useNavigate()
     const dispatch = useDispatch()
     const { movies, loading, error } = useSelector(state => state.movie)
+    const [searchParams, setSearchParams] = useSearchParams({ tenPhim: "" })
+    const searchValue = useDebounce(searchParams.get("tenPhim"), 300)
+
 
     const handleSelect = (action, id) => {
         switch (action) {
@@ -94,7 +100,7 @@ const MovieList = () => {
             headerName: "Image",
             flex: 2,
             renderCell: (params) => {
-                return (<img src={params.value} width={80} alt="" />)
+                return (<img src={params.value} className={styles.movieImg} alt="" />)
             }
         },
         {
@@ -130,15 +136,22 @@ const MovieList = () => {
     ];
 
     useEffect(() => {
-        dispatch(getMovies())
+        dispatch(getMovies(searchValue))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
+    }, [searchValue])
+    console.log(movies)
     return (
         <div className={styles.wrapper}>
             <header className={styles.header}>
                 <h2>Movies</h2>
                 <div className={styles.control}>
+                    <SearchBar
+                        outline
+                        placeholder="Find movie"
+                        value={searchParams.get("tenPhim")}
+                        onChange={(e) => setSearchParams({ tenPhim: e.target.value })}
+                        onClearValue={() => setSearchParams()}
+                    />
                     <Button
                         to='/admin/movies/new'
                         solid
@@ -155,8 +168,7 @@ const MovieList = () => {
                 rows={movies}
                 columns={columns}
                 getRowId={(row) => row.maPhim}
-                rowsPerPageOptions={[10]}
-                pageSize={10}
+                autoRowHeight
                 loading={loading}
                 error={error ? error : null}
             />
