@@ -123,10 +123,13 @@ const MovieDetail = () => {
                                     </div>
                                     <div className={styles.info}>
                                         <h5>Status:</h5>
-                                        <span>
-                                            {selectedMovie.sapChieu}
-                                            {selectedMovie.dangChieu}
-                                            {selectedMovie.hot}
+                                        <span className={styles.status}>
+                                            {selectedMovie.hot &&
+                                                <p className={styles.statusError}>Hot</p>}
+                                            {selectedMovie.sapChieu &&
+                                                <p className={styles.statusWarning}>Comming</p>}
+                                            {selectedMovie.dangChieu &&
+                                                <p className={styles.statusSuccess}>Showing</p>}
                                         </span>
                                     </div>
                                     <div className={styles.info}>

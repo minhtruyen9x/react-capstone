@@ -17,6 +17,36 @@
     }
 }
 
+.status {
+    --status-color: black;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+
+    &>p {
+        border-radius: 4px;
+        border: 1px solid var(--status-color);
+        color: var(--status-color);
+        padding: 2px 4px;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    .statusSuccess {
+        --status-color: #1B5E20; //#01579B
+    }
+
+    .statusWarning {
+        --status-color: #E65100;
+    }
+
+    .statusError {
+        --status-color: #C62828;
+    }
+}
+
 .editBtn {
     position: absolute;
     top: 20px;
