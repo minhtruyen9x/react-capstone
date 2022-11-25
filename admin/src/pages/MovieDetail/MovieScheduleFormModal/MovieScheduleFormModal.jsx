@@ -83,8 +83,9 @@ const MovieScheduleFormModal = ({ open = false, onClose }) => {
     }
 
     const onSubmit = async (values) => {
-        // const { maHeThongRap, maCumRap, ...info } = values
-        createSchedule.runAsync(values)
+        const { maHeThongRap, maCumRap, ...info } = values
+        info.maRap = maCumRap
+        createSchedule.runAsync(info)
             .then(() => {
                 toast.success("Update film successfully")
                 console.log("asdas")

@@ -10,7 +10,7 @@ const userAPI = {
         if (!tuKhoa) tuKhoa = null
         return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDung", {
             params: {
-                maNhom: "GP15",
+                maNhom: "GP06",
                 tuKhoa: tuKhoa
             }
         })
@@ -19,7 +19,7 @@ const userAPI = {
     getUsersPagination: (values) => {
         return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDungPhanTrang", {
             params: {
-                maNhom: "GP15",
+                maNhom: "GP06",
                 ...values
             }
         })
@@ -28,7 +28,7 @@ const userAPI = {
     getUsersPaginationByKey: (values) => {
         return fetcher("/QuanLyNguoiDung/LayDanhSachNguoiDungPhanTrang", {
             params: {
-                maNhom: "GP15",
+                maNhom: "GP06",
                 ...values
             }
         })
@@ -52,7 +52,7 @@ const userAPI = {
     createUser: (values) => {
         return fetcher.post("/QuanLyNguoiDung/ThemNguoiDung", {
             ...values,
-            maNhom: "GP15"
+            maNhom: "GP06"
         })
     },
 

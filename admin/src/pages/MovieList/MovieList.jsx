@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteMovie, getMovies } from "../../slices/movieSlice";
@@ -28,7 +28,6 @@ const MovieList = () => {
     const { movies, loading, error } = useSelector(state => state.movie)
     const [searchParams, setSearchParams] = useSearchParams({ tenPhim: "" })
     const searchValue = useDebounce(searchParams.get("tenPhim"), 300)
-
 
     const handleSelect = (action, id) => {
         switch (action) {
@@ -60,6 +59,7 @@ const MovieList = () => {
         }
 
     }
+
     const actions = [
 
         {
@@ -94,7 +94,7 @@ const MovieList = () => {
         },
     ]
 
-    const columns = [
+    const columns = useMemo(() => [
         {
             field: "hinhAnh",
             headerName: "Image",
@@ -133,7 +133,10 @@ const MovieList = () => {
                 );
             },
         },
-    ];
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    ], [])
+
+    const handleGetRowID = useCallback((row) => row.maPhim, [])
 
     useEffect(() => {
         dispatch(getMovies(searchValue))
@@ -167,7 +170,7 @@ const MovieList = () => {
             <TableData
                 rows={movies}
                 columns={columns}
-                getRowId={(row) => row.maPhim}
+                getRowId={handleGetRowID}
                 autoRowHeight
                 loading={loading}
                 error={error ? error : null}

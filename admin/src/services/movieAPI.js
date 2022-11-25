@@ -9,7 +9,7 @@ const movieAPI = {
     getMovieDetail: (MaPhim) => {
         return fetcher("/QuanLyPhim/LayThongTinPhim", {
             params: {
-                maNhom: "GP15",
+                maNhom: "GP06",
                 MaPhim
             }
         })
@@ -21,14 +21,14 @@ const movieAPI = {
         if (tenPhim) {
             return fetcher("/QuanLyPhim/LayDanhSachPhim", {
                 params: {
-                    maNhom: "GP15",
+                    maNhom: "GP06",
                     tenPhim
                 }
             })
         }
         return fetcher("/QuanLyPhim/LayDanhSachPhim", {
             params: {
-                maNhom: "GP15",
+                maNhom: "GP06",
             }
         })
     },
@@ -36,7 +36,7 @@ const movieAPI = {
     getMoviesPagination: (values) => {
         return fetcher("/QuanLyPhim/LayDanhSachPhimPhanTrang", {
             params: {
-                maNhom: "GP15",
+                maNhom: "GP06",
                 ...values
             }
         })
@@ -45,14 +45,14 @@ const movieAPI = {
     getMovieByDay: (values) => {
         return fetcher("/QuanLyPhim/LayDanhSachPhimTheoNgay", {
             params: {
-                maNhom: "GP15",
+                maNhom: "GP06",
                 ...values
             }
         })
     },
 
     createMovie: (values) => {
-        values.append("maNhom", "GP15")
+        values.append("maNhom", "GP06")
         return fetcher.post("/QuanLyPhim/ThemPhimUploadHinh", values)
     },
 

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 
@@ -20,14 +21,22 @@ const Login = () => {
         defaultValues: { taiKhoan: "", matKhau: "" }
     })
 
+    useEffect(() => {
+        if (state) {
+            for (const [key, value] of Object.entries(state)) {
+                setValue(key, value)
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     const onSubmit = (values) => {
         dispatch(login(values))
     }
 
-    if (state) {
-        for (const [key, value] of Object.entries(state)) {
-            setValue(key, value)
-        }
+    const getRootAccount = () => {
+        setValue("taiKhoan", "anonymous00")
+        setValue("matKhau", "anonymous00")
     }
 
     if (user) {
@@ -80,6 +89,7 @@ const Login = () => {
                         </Button>
                     </form>
                 </div>
+                <Button onClick={getRootAccount} solid small primary className={styles.clickMe}>Click me!!!!</Button>
             </div>
         </div>
     )

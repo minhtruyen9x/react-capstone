@@ -27,6 +27,7 @@ const UserList = () => {
     const [searchParams, setSearchParams] = useSearchParams({ tuKhoa: "" })
     const searchValue = useDebounce(searchParams.get("tuKhoa"), 300)
     const naigate = useNavigate()
+
     const handleSelect = (action, id) => {
         switch (action) {
             case "delete": {
@@ -134,6 +135,7 @@ const UserList = () => {
                 )
             },
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     ], [])
     const handleRowId = useCallback((row) => {
         return row.taiKhoan
